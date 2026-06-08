@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaike Pampa - Ropa de Trabajo</title>
+    <!-- Librería de Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --dorado: #9e825e;
+            --grafito: #202020;
+            --crema: #fdfcfb;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--crema);
+            color: var(--grafito);
+            margin: 0; 
+            padding: 0;
+        }
+        header {
+            background-color: var(--grafito);
+            color: var(--crema);
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--dorado);
+        }
+        header h1 {
+            margin: 0;
+            letter-spacing: 2px;
+        }
+        nav {
+            display: flex; 
+            justify-content: center; 
+            gap: 30px; 
+            padding: 15px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        nav a {
+            color: var(--grafito); 
+            text-decoration: none; 
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            transition: color 0.3s;
+        }
+        nav a:hover { 
+            color: var(--dorado); 
+        }
+        .container {
+            max-width: 1200px; 
+            margin: 40px auto; 
+            padding: 0 20px;
+        }
+        .grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 30px;
+        }
+        .card {
+            background: #fff; 
+            border: 1px solid #eee; 
+            border-radius: 8px;
+            overflow: hidden; 
+            text-align: center; 
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover { 
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+            border-bottom: 3px solid var(--dorado);
+        }
+        .card img { 
+            width: 100%; 
+            height: 300px; 
+            object-fit: cover; 
+            background-color: #f5f5f5;
+        }
+        .card-body { 
+            padding: 20px; 
+        }
+        .card-title { 
+            font-size: 1.1em; 
+            font-weight: bold; 
+            margin-bottom: 8px; 
+            text-transform: uppercase;
+        }
+        .card-meta {
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+        .card-price { 
+            color: var(--dorado); 
+            font-size: 1.4em; 
+            font-weight: bold; 
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Acá luego pondremos la etiqueta <img> con tu logo real -->
+        <h1>KAIKE PAMPA</h1>
+        <p style="color: var(--dorado); letter-spacing: 1px;">ROPA DE TRABAJO</p>
+    </header>
+
+    <nav>
+        <a href="#" onclick="filtrar('Todas')">Todas</a>
+        <a href="#" onclick="filtrar('Chombas')">Chombas</a>
+        <a href="#" onclick="filtrar('Pantalones')">Pantalones</a>
+        <a href="#" onclick="filtrar('Camisas')">Camisas</a>
+        <a href="#" onclick="filtrar('Seguridad')">Seguridad</a>
+    </nav>
+
+    <div class="container">
+        <div class="grid" id="catalogo">
+            <!-- Los productos de Supabase se inyectan acá -->
+        </div>
+    </div>
+
+    <script>
+        // 1. REEMPLAZÁ ESTO CON TUS CLAVES DE SUPABASE DE KAIKE PAMPA
+        const SUPABASE_URL = 'https://ibqypnfabfieikpxczdn.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlicXlwbmZhYmZpZWlrcHhjemRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5MjY3ODgsImV4cCI6MjA5NjUwMjc4OH0.0IxOrg6UILOM1yY58WdIUJYFGjDWx4EmXYNOv-JAOAg';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let todosLosProductos = [];
+
+        // 2. Traer productos
+        async function cargarProductos() {
+            const { data, error } = await supabase
+                .from('productos')
+                .select('*')
+                .order('nombre', { ascending: true });
+            
+            if (error) {
+                console.error('Error al conectar con Supabase:', error);
+                return;
+            }
+            
+            todosLosProductos = data;
+            renderizar(data);
+        }
+
+        // 3. Mostrar productos en pantalla
+        function renderizar(productos) {
+            const contenedor = document.getElementById('catalogo');
+            contenedor.innerHTML = '';
+            
+            if(productos.length === 0) {
+                contenedor.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No hay artículos en esta categoría.</p>';
+                return;
+            }
+
+            productos.forEach(prod => {
+                const imagenUrl = prod.foto_url ? prod.foto_url : 'https://via.placeholder.com/300x300?text=FOTO+PENDIENTE';
+                const html = `
+                    <div class="card">
+                        <img src="${imagenUrl}" alt="${prod.nombre}">
+                        <div class="card-body">
+                            <div class="card-title">${prod.nombre}</div>
+                            <div class="card-meta">
+                                ${prod.categoria || 'Sin categoría'} | Talle: ${prod.talle || '-'} | Color: ${prod.color || '-'}
+                            </div>
+                            <div class="card-price">$${prod.precio}</div>
+                        </div>
+                    </div>
+                `;
+                contenedor.innerHTML += html;
+            });
+        }
+
+        // 4. Sistema de filtros
+        function filtrar(categoriaSeleccionada) {
+            if (categoriaSeleccionada === 'Todas') {
+                renderizar(todosLosProductos);
+            } else {
+                const filtrados = todosLosProductos.filter(p => p.categoria === categoriaSeleccionada);
+                renderizar(filtrados);
+            }
+        }
+
+        // Iniciar
+        cargarProductos();
+    </script>
+</body>
+</html>
