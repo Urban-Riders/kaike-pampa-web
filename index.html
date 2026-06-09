@@ -19,8 +19,42 @@
         nav { display: flex; justify-content: center; background: #222; }
         nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
         nav ul li { position: relative; }
-        nav ul li button { background: none; border: none; color: white; cursor: pointer; font-size: 14px; font-weight: bold; padding: 15px 20px; text-transform: uppercase; transition: 0.3s; }
-        nav ul li button:hover { background: #444; color: #f39c12; }
+        nav ul li button:not(.dropdown-content button) { background: none; border: none; color: white; cursor: pointer; font-size: 14px; font-weight: bold; padding: 15px 20px; text-transform: uppercase; transition: 0.3s; }
+        nav ul li button:not(.dropdown-content button):hover { background: #444; color: #f39c12; }
+
+        /* --- ESTILOS DEL MENÚ DESPLEGABLE --- */
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content {
+            display: none; 
+            position: absolute; 
+            background-color: #222; 
+            min-width: 240px; 
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); 
+            z-index: 101; 
+            top: 100%; 
+            left: 0;
+            border-top: 2px solid #f39c12;
+            border-radius: 0 0 4px 4px;
+        }
+        .dropdown-content button { 
+            color: white; 
+            padding: 12px 20px; 
+            display: block; 
+            width: 100%; 
+            text-align: left; 
+            border: none; 
+            background: transparent; 
+            font-size: 13px; 
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: 0.2s;
+            border-bottom: 1px solid #333;
+        }
+        .dropdown-content button:last-child { border-bottom: none; }
+        .dropdown-content button:hover { background-color: #333; color: #f39c12; padding-left: 25px; }
+        .dropdown:hover .dropdown-content { display: block; }
+        .dropdown:hover > button { background-color: #444; color: #f39c12; }
         
         /* Banner de Inicio */
         .hero { background: url('https://images.unsplash.com/photo-1587614295999-6c1c13675117?q=80&w=1200&auto=format&fit=crop') center/cover; height: 350px; display: flex; align-items: center; justify-content: center; text-align: center; color: white; position: relative; }
@@ -94,18 +128,25 @@
             <ul>
                 <li><button onclick="mostrarInicio()">INICIO</button></li>
                 <li><button onclick="filtrar('Todas')">TODOS LOS PRODUCTOS</button></li>
-                <li><button onclick="filtrar('Bombachas y Bermudas')">BOMBACHAS Y BERMUDAS</button></li>
-                <li><button onclick="filtrar('Buzos')">BUZOS</button></li>
-                <li><button onclick="filtrar('Calzado')">CALZADO</button></li>
-                <li><button onclick="filtrar('Camisas')">CAMISAS</button></li>
-                <li><button onclick="filtrar('Camperas')">CAMPERAS</button></li>
-                <li><button onclick="filtrar('Chalecos')">CHALECOS</button></li>
-                <li><button onclick="filtrar('Chombas')">CHOMBAS</button></li>
-                <li><button onclick="filtrar('Fajas')">FAJAS</button></li>
-                <li><button onclick="filtrar('Gorra')">GORRAS</button></li>
-                <li><button onclick="filtrar('Mamelucos')">MAMELUCOS</button></li>
-                <li><button onclick="filtrar('Pantalones')">PANTALONES</button></li>
-                <li><button onclick="filtrar('Seguridad')">SEGURIDAD</button></li>
+                
+                <!-- MENÚ DESPLEGABLE DE CATEGORÍAS -->
+                <li class="dropdown">
+                    <button>CATEGORÍAS ▾</button>
+                    <div class="dropdown-content">
+                        <button onclick="filtrar('Bombachas y Bermudas')">Bombachas y Bermudas</button>
+                        <button onclick="filtrar('Buzos')">Buzos</button>
+                        <button onclick="filtrar('Calzado')">Calzado</button>
+                        <button onclick="filtrar('Camisas')">Camisas</button>
+                        <button onclick="filtrar('Camperas')">Camperas</button>
+                        <button onclick="filtrar('Chalecos')">Chalecos</button>
+                        <button onclick="filtrar('Chombas')">Chombas</button>
+                        <button onclick="filtrar('Fajas')">Fajas</button>
+                        <button onclick="filtrar('Gorra')">Gorras</button>
+                        <button onclick="filtrar('Mamelucos')">Mamelucos</button>
+                        <button onclick="filtrar('Pantalones')">Pantalones</button>
+                        <button onclick="filtrar('Seguridad')">Seguridad</button>
+                    </div>
+                </li>
             </ul>
         </nav>
     </header>
