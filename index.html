@@ -67,18 +67,20 @@
         /* --- REGLA PARA MÓVILES (Evita cortes en el desplegable) --- */
         @media (max-width: 768px) {
             .dropdown-content {
-                left: 50%;
-                transform: translateX(-50%);
-                width: 90vw;
+                left: auto;
+                right: 0; /* Ancla el menú a la derecha para que se despliegue hacia la izquierda */
+                transform: none; /* Quitamos el centrado forzado */
+                width: 250px; /* Ancho cómodo y estético para el celular */
+                max-width: 95vw; /* Límite de seguridad para pantallas muy chicas */
                 min-width: unset;
             }
             .dropdown-content button {
-                white-space: normal; /* Permite que el texto baje a dos renglones */
+                white-space: normal; /* Permite que el texto baje a dos renglones si es largo */
                 line-height: 1.4;
-                text-align: center; /* Centrado queda mejor en celulares */
-                padding: 15px;
+                text-align: left; /* Lo regresamos a la izquierda para mantener la prolijidad */
+                padding: 12px 20px;
             }
-            .dropdown-content button:hover { padding-left: 15px; } /* Desactiva el desplazamiento a la derecha en móviles */
+            .dropdown-content button:hover { padding-left: 20px; } /* Desactiva el desplazamiento a la derecha en móviles */
         }
         
         /* Banner de Inicio */
