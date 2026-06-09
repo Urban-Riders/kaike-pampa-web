@@ -29,6 +29,9 @@
             position: absolute; 
             background-color: #222; 
             min-width: 240px; 
+            /* Se limita la altura máxima y se añade scroll interno */
+            max-height: 60vh; 
+            overflow-y: auto;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); 
             z-index: 101; 
             top: 100%; 
@@ -36,6 +39,12 @@
             border-top: 2px solid #f39c12;
             border-radius: 0 0 4px 4px;
         }
+        
+        /* Modificamos la barra de scroll del menú para que quede prolija */
+        .dropdown-content::-webkit-scrollbar { width: 6px; }
+        .dropdown-content::-webkit-scrollbar-track { background: #222; }
+        .dropdown-content::-webkit-scrollbar-thumb { background: #f39c12; border-radius: 3px; }
+        .dropdown-content::-webkit-scrollbar-thumb:hover { background: #d68910; }
         .dropdown-content button { 
             color: white; 
             padding: 12px 20px; 
