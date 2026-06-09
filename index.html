@@ -10,11 +10,12 @@
         body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f8f9fa; color: #333; }
         * { box-sizing: border-box; }
         
-        /* Navbar y Menú */
-       /* Navbar y Menú Modificado para Logo Claro */
+        /* Navbar y Menú Modificado para Logo Claro */
         header { background: #ffffff; color: #333; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        ..top-bar { display: flex; justify-content: flex-start; align-items: center; padding: 5px 40px; border-bottom: 1px solid #eee; }
-        .top-bar h1 { margin: 0; font-size: 1.8em; letter-spacing: 2px; color: #fff; text-transform: uppercase; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 40px; background: #ffffff; border-bottom: 2px solid #f39c12; }
+        .header-texto { text-align: right; color: #333; }
+        .header-texto h1 { margin: 0; font-size: 1.2em; text-transform: uppercase; color: #111; }
+        .header-texto p { margin: 5px 0 0 0; font-size: 0.9em; color: #666; }
         nav { display: flex; justify-content: center; background: #222; }
         nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
         nav ul li { position: relative; }
@@ -56,8 +57,21 @@
         .opciones-contenedor { margin-bottom: 20px; }
         .opcion-grupo { margin-bottom: 15px; }
         .opcion-grupo label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
-        .opcion-grupo select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; }
         .guia-talles { font-size: 0.85em; color: #2980b9; text-decoration: underline; cursor: pointer; display: inline-block; margin-top: 5px; }
+
+        /* --- NUEVOS ESTILOS PARA LOS SELECTORES VISUALES DE TALLES Y COLORES --- */
+        .selector-visual { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px; }
+        .opcion-talle { border: 2px solid #ccc; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; background: white; user-select: none; }
+        .opcion-talle:hover { border-color: #999; }
+        .opcion-talle.seleccionado { border-color: #27ae60; background: #27ae60; color: white; }
+        
+        .opcion-color { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; transition: 0.2s; position: relative; }
+        .opcion-color:hover { transform: scale(1.1); }
+        /* El box-shadow asegura que el borde de selección se vea incluso en colores claros u oscuros */
+        .opcion-color.seleccionado { border-color: #27ae60; transform: scale(1.1); box-shadow: 0 0 0 2px white, 0 0 0 4px #27ae60; }
+        
+        .error-seleccion { color: red; font-size: 0.85em; display: none; margin-top: 5px; font-weight: bold; }
+        /* ------------------------------------------------------------------------ */
 
         .btn-agregar { background: #111; color: white; border: none; padding: 15px; width: 100%; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 1.1em; text-transform: uppercase; transition: 0.3s; margin-top: 10px; }
         .btn-agregar:hover { background: #27ae60; }
@@ -65,45 +79,19 @@
         /* Carrito Flotante */
         .carrito-flotante { position: fixed; bottom: 25px; right: 25px; background: #25d366; color: white; padding: 15px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 1.1em; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.3s; z-index: 999; display: flex; align-items: center; gap: 10px; }
         .carrito-flotante:hover { transform: scale(1.05); background: #20b858; }
-.top-bar { 
-    display: flex; 
-    justify-content: space-between; /* Esto empuja el texto a la derecha */
-    align-items: center; 
-    padding: 10px 40px; 
-    background: #ffffff; 
-    border-bottom: 2px solid #f39c12; /* Un toque de color */
-}
-
-.header-texto { 
-    text-align: right; 
-    color: #333; 
-}
-
-.header-texto h1 { 
-    margin: 0; 
-    font-size: 1.2em; 
-    text-transform: uppercase; 
-    color: #111; 
-}
-
-.header-texto p { 
-    margin: 5px 0 0 0; 
-    font-size: 0.9em; 
-    color: #666; 
-}
     </style>
 </head>
 <body>
 
     <header>
         <div class="top-bar">
-    <img src="img/Logo Kaike.png" alt="Logo Kaike Pampa" style="height: 120px; width: auto;">
-    
-    <div class="header-texto">
-        <h1>INDUMENTARIA PARA LA INDUSTRIA Y EL AGRO</h1>
-        <p>Calidad, resistencia y comodidad para el trabajo diario.</p>
-    </div>
-</div>
+            <img src="img/Logo Kaike.png" alt="Logo Kaike Pampa" style="height: 120px; width: auto;">
+            
+            <div class="header-texto">
+                <h1>INDUMENTARIA PARA LA INDUSTRIA Y EL AGRO</h1>
+                <p>Calidad, resistencia y comodidad para el trabajo diario.</p>
+            </div>
+        </div>
         <nav>
             <ul>
                 <li><button onclick="mostrarInicio()">INICIO</button></li>
@@ -118,9 +106,7 @@
 
     <div id="pantalla-inicio">
         <div class="hero">
-            <div class="hero-content">
-                
-            </div>
+            <div class="hero-content"></div>
         </div>
         <div class="container">
             <h2 class="titulo-seccion">Productos Destacados</h2>
@@ -146,31 +132,16 @@
                 
                 <div class="opciones-contenedor">
                     <div class="opcion-grupo">
-                        <label for="modal-talle">Talle:</label>
-                        <select id="modal-talle">
-                            <option value="S">S</option>
-                            <option value="M">M</option>
-                            <option value="L">L</option>
-                            <option value="XL">XL</option>
-                            <option value="XXL">XXL</option>
-                            <option value="38">38 (Pantalón)</option>
-                            <option value="40">40 (Pantalón)</option>
-                            <option value="42">42 (Pantalón)</option>
-                            <option value="44">44 (Pantalón)</option>
-                            <option value="46">46 (Pantalón)</option>
-                        </select>
+                        <label>Talle:</label>
+                        <div id="contenedor-modal-talles" class="selector-visual"></div>
+                        <div id="error-talle" class="error-seleccion">⚠️ Por favor, seleccioná un talle.</div>
                         <span class="guia-talles" onclick="alert('Guía de talles:\nS: Pecho 90cm\nM: Pecho 100cm\nL: Pecho 110cm\nXL: Pecho 120cm\nPantalones: Medir contorno de cintura.')">Ver guía de talles</span>
                     </div>
 
                     <div class="opcion-grupo">
-                        <label for="modal-color">Color:</label>
-                        <select id="modal-color">
-                            <option value="Azul Marino">Azul Marino</option>
-                            <option value="Negro">Negro</option>
-                            <option value="Beige">Beige</option>
-                            <option value="Verde Trabajo">Verde Trabajo</option>
-                            <option value="Blanco">Blanco</option>
-                        </select>
+                        <label>Color:</label>
+                        <div id="contenedor-modal-colores" class="selector-visual"></div>
+                        <div id="error-color" class="error-seleccion">⚠️ Por favor, seleccioná un color.</div>
                     </div>
                 </div>
 
@@ -184,7 +155,7 @@
     </div>
 
     <script>
-        // PEGAR TUS CREDENCIALES DE KAIKE PAMPA ACÁ
+        // CLAVES DE SUPABASE
         const SUPABASE_URL = 'https://ibqypnfabfieikpxczdn.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlicXlwbmZhYmZpZWlrcHhjemRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5MjY3ODgsImV4cCI6MjA5NjUwMjc4OH0.0IxOrg6UILOM1yY58WdIUJYFGjDWx4EmXYNOv-JAOAg';
         const cliente = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -192,6 +163,10 @@
         let productosGlobales = [];
         let carrito = [];
         let productoSeleccionado = null;
+        
+        // Variables para guardar la selección del cliente antes de añadir al carrito
+        let talleElegido = null;
+        let colorElegido = null;
 
         async function cargarProductos() {
             const { data, error } = await cliente.from('productos').select('*');
@@ -206,7 +181,6 @@
         function mostrarDestacados(productos) {
             const contenedor = document.getElementById('contenedor-destacados');
             contenedor.innerHTML = '';
-            // Muestra solo los primeros 8 productos en el inicio
             const destacados = productos.slice(0, 8);
             renderizarTarjetas(destacados, contenedor);
         }
@@ -217,7 +191,6 @@
             
             const contenedor = document.getElementById('contenedor-productos');
             const titulo = document.getElementById('titulo-categoria');
-            
             if (categoria === 'Todas') {
                 titulo.innerText = 'Todos los Productos';
                 renderizarTarjetas(productosGlobales, contenedor);
@@ -241,7 +214,6 @@
             }
             productos.forEach(prod => {
                 const foto = prod.foto_url ? prod.foto_url : 'https://via.placeholder.com/400x400?text=Sin+Imagen';
-                // Convertimos el objeto producto a JSON para pasarlo a la función
                 const prodJson = JSON.stringify(prod).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
                 
                 contenedor.innerHTML += `
@@ -260,22 +232,83 @@
             const prod = JSON.parse(prodString);
             productoSeleccionado = prod;
             
+            // Reiniciamos las selecciones y ocultamos errores
+            talleElegido = null;
+            colorElegido = null;
+            document.getElementById('error-talle').style.display = 'none';
+            document.getElementById('error-color').style.display = 'none';
+            
             const foto = prod.foto_url ? prod.foto_url : 'https://via.placeholder.com/400x400?text=Sin+Imagen';
             document.getElementById('modal-foto').src = foto;
             document.getElementById('modal-nombre').innerText = prod.nombre;
             document.getElementById('modal-precio').innerText = `$${prod.precio}`;
             
-            // AGREGAMOS ESTA LÍNEA PARA ACTUALIZAR LA DESCRIPCIÓN
-            // Buscamos el elemento HTML que tiene la clase 'descripcion' dentro del modal
             const descripcionEl = document.querySelector('.modal-info .descripcion');
-            // Le asignamos la descripción del producto o un texto por defecto si está en null
             descripcionEl.innerText = prod.descripcion ? prod.descripcion : 'Sin descripción disponible para este producto.';
             
+            // --- GENERAR BOTONES DE TALLES ---
+            const contenedorTalles = document.getElementById('contenedor-modal-talles');
+            contenedorTalles.innerHTML = '';
+            if (prod.talle) {
+                const tallesArray = prod.talle.split(',').map(t => t.trim());
+                tallesArray.forEach(talle => {
+                    const btn = document.createElement('div');
+                    btn.className = 'opcion-talle';
+                    btn.innerText = talle;
+                    btn.onclick = () => {
+                        // Quita la selección a todos y se la da al clickeado
+                        document.querySelectorAll('.opcion-talle').forEach(el => el.classList.remove('seleccionado'));
+                        btn.classList.add('seleccionado');
+                        talleElegido = talle;
+                        document.getElementById('error-talle').style.display = 'none';
+                    };
+                    contenedorTalles.appendChild(btn);
+                });
+            } else {
+                contenedorTalles.innerHTML = '<span style="color:#666;">Único</span>';
+                talleElegido = 'Único'; // Si no hay talles en BD, forzamos "Único"
+            }
+
+            // --- GENERAR BOTONES DE COLORES ---
+            const contenedorColores = document.getElementById('contenedor-modal-colores');
+            contenedorColores.innerHTML = '';
+            if (prod.color) {
+                const coloresArray = prod.color.split(',').map(c => c.trim());
+                coloresArray.forEach(color => {
+                    const btn = document.createElement('div');
+                    btn.className = 'opcion-color';
+                    btn.style.backgroundColor = color;
+                    btn.onclick = () => {
+                        document.querySelectorAll('.opcion-color').forEach(el => el.classList.remove('seleccionado'));
+                        btn.classList.add('seleccionado');
+                        colorElegido = color;
+                        document.getElementById('error-color').style.display = 'none';
+                    };
+                    contenedorColores.appendChild(btn);
+                });
+            } else {
+                contenedorColores.innerHTML = '<span style="color:#666;">Estándar</span>';
+                colorElegido = 'Estándar';
+            }
+
+            // Lógica al apretar "Añadir al pedido"
             document.getElementById('btn-confirmar-agregar').onclick = () => {
-                const talleElegido = document.getElementById('modal-talle').value;
-                const colorElegido = document.getElementById('modal-color').value;
-                agregarAlCarrito(prod.nombre, talleElegido, colorElegido, prod.precio);
-                cerrarModal();
+                let valido = true;
+                
+                // Validamos que haya seleccionado algo si hay opciones disponibles
+                if (!talleElegido && prod.talle) {
+                    document.getElementById('error-talle').style.display = 'block';
+                    valido = false;
+                }
+                if (!colorElegido && prod.color) {
+                    document.getElementById('error-color').style.display = 'block';
+                    valido = false;
+                }
+
+                if (valido) {
+                    agregarAlCarrito(prod.nombre, talleElegido, colorElegido, prod.precio);
+                    cerrarModal();
+                }
             };
 
             document.getElementById('modal-producto').style.display = 'flex';
@@ -298,16 +331,15 @@
             }
             
             // PONER EL NUMERO DE TELEFONO DE KAIKE PAMPA ACÁ (EJ: 5491123456789)
-            const numeroWhatsApp = "549XXXXXXXXXX"; 
-            
+            const numeroWhatsApp = "549XXXXXXXXXX";
             let textoMensaje = "¡Hola! Quería consultar por el siguiente pedido:%0A%0A";
             let totalPedido = 0;
-
+            
             carrito.forEach(articulo => {
                 textoMensaje += `- ${articulo.nombre} (Talle: ${articulo.talle}, Color: ${articulo.color}) - $${articulo.precio}%0A`;
                 totalPedido += parseFloat(articulo.precio);
             });
-
+            
             textoMensaje += `%0A*Total aproximado: $${totalPedido}*%0A%0AAguardo confirmación de stock.`;
             
             const url = `https://wa.me/${numeroWhatsApp}?text=${textoMensaje}`;
