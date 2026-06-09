@@ -67,11 +67,9 @@
         
         .opcion-color { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; transition: 0.2s; position: relative; }
         .opcion-color:hover { transform: scale(1.1); }
-        /* El box-shadow asegura que el borde de selección se vea incluso en colores claros u oscuros */
         .opcion-color.seleccionado { border-color: #27ae60; transform: scale(1.1); box-shadow: 0 0 0 2px white, 0 0 0 4px #27ae60; }
         
         .error-seleccion { color: red; font-size: 0.85em; display: none; margin-top: 5px; font-weight: bold; }
-        /* ------------------------------------------------------------------------ */
 
         .btn-agregar { background: #111; color: white; border: none; padding: 15px; width: 100%; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 1.1em; text-transform: uppercase; transition: 0.3s; margin-top: 10px; }
         .btn-agregar:hover { background: #27ae60; }
@@ -96,10 +94,18 @@
             <ul>
                 <li><button onclick="mostrarInicio()">INICIO</button></li>
                 <li><button onclick="filtrar('Todas')">TODOS LOS PRODUCTOS</button></li>
-                <li><button onclick="filtrar('Chombas')">CHOMBAS Y REMERAS</button></li>
-                <li><button onclick="filtrar('Pantalones')">PANTALONES</button></li>
+                <li><button onclick="filtrar('Bombachas y Bermudas')">BOMBACHAS Y BERMUDAS</button></li>
+                <li><button onclick="filtrar('Buzos')">BUZOS</button></li>
+                <li><button onclick="filtrar('Calzado')">CALZADO</button></li>
                 <li><button onclick="filtrar('Camisas')">CAMISAS</button></li>
-                <li><button onclick="filtrar('Seguridad')">SEGURIDAD Y CALZADO</button></li>
+                <li><button onclick="filtrar('Camperas')">CAMPERAS</button></li>
+                <li><button onclick="filtrar('Chalecos')">CHALECOS</button></li>
+                <li><button onclick="filtrar('Chombas')">CHOMBAS</button></li>
+                <li><button onclick="filtrar('Fajas')">FAJAS</button></li>
+                <li><button onclick="filtrar('Gorra')">GORRAS</button></li>
+                <li><button onclick="filtrar('Mamelucos')">MAMELUCOS</button></li>
+                <li><button onclick="filtrar('Pantalones')">PANTALONES</button></li>
+                <li><button onclick="filtrar('Seguridad')">SEGURIDAD</button></li>
             </ul>
         </nav>
     </header>
