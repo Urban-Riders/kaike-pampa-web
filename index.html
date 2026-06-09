@@ -256,7 +256,7 @@
             });
         }
 
-        function abrirModal(prodString) {
+       function abrirModal(prodString) {
             const prod = JSON.parse(prodString);
             productoSeleccionado = prod;
             
@@ -264,6 +264,12 @@
             document.getElementById('modal-foto').src = foto;
             document.getElementById('modal-nombre').innerText = prod.nombre;
             document.getElementById('modal-precio').innerText = `$${prod.precio}`;
+            
+            // AGREGAMOS ESTA LÍNEA PARA ACTUALIZAR LA DESCRIPCIÓN
+            // Buscamos el elemento HTML que tiene la clase 'descripcion' dentro del modal
+            const descripcionEl = document.querySelector('.modal-info .descripcion');
+            // Le asignamos la descripción del producto o un texto por defecto si está en null
+            descripcionEl.innerText = prod.descripcion ? prod.descripcion : 'Sin descripción disponible para este producto.';
             
             document.getElementById('btn-confirmar-agregar').onclick = () => {
                 const talleElegido = document.getElementById('modal-talle').value;
