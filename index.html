@@ -29,7 +29,6 @@
             position: absolute; 
             background-color: #222; 
             min-width: 240px; 
-            /* Se limita la altura máxima y se añade scroll interno */
             max-height: 60vh; 
             overflow-y: auto;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); 
@@ -40,11 +39,11 @@
             border-radius: 0 0 4px 4px;
         }
         
-        /* Modificamos la barra de scroll del menú para que quede prolija */
         .dropdown-content::-webkit-scrollbar { width: 6px; }
         .dropdown-content::-webkit-scrollbar-track { background: #222; }
         .dropdown-content::-webkit-scrollbar-thumb { background: #f39c12; border-radius: 3px; }
         .dropdown-content::-webkit-scrollbar-thumb:hover { background: #d68910; }
+        
         .dropdown-content button { 
             color: white; 
             padding: 12px 20px; 
@@ -64,6 +63,23 @@
         .dropdown-content button:hover { background-color: #333; color: #f39c12; padding-left: 25px; }
         .dropdown:hover .dropdown-content { display: block; }
         .dropdown:hover > button { background-color: #444; color: #f39c12; }
+
+        /* --- REGLA PARA MÓVILES (Evita cortes en el desplegable) --- */
+        @media (max-width: 768px) {
+            .dropdown-content {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 90vw;
+                min-width: unset;
+            }
+            .dropdown-content button {
+                white-space: normal; /* Permite que el texto baje a dos renglones */
+                line-height: 1.4;
+                text-align: center; /* Centrado queda mejor en celulares */
+                padding: 15px;
+            }
+            .dropdown-content button:hover { padding-left: 15px; } /* Desactiva el desplazamiento a la derecha en móviles */
+        }
         
         /* Banner de Inicio */
         .hero { background: url('https://images.unsplash.com/photo-1587614295999-6c1c13675117?q=80&w=1200&auto=format&fit=crop') center/cover; height: 350px; display: flex; align-items: center; justify-content: center; text-align: center; color: white; position: relative; }
@@ -138,7 +154,6 @@
                 <li><button onclick="mostrarInicio()">INICIO</button></li>
                 <li><button onclick="filtrar('Todas')">TODOS LOS PRODUCTOS</button></li>
                 
-                <!-- MENÚ DESPLEGABLE DE CATEGORÍAS -->
                 <li class="dropdown">
                     <button>CATEGORÍAS ▾</button>
                     <div class="dropdown-content">
