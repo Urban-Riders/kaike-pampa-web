@@ -64,7 +64,7 @@
         .dropdown:hover .dropdown-content { display: block; }
         .dropdown:hover > button { background-color: #444; color: #f39c12; }
 
-        /* --- REGLA PARA MÓVILES (Evita cortes en el desplegable) --- */
+        /* --- REGLA PARA MÓVILES --- */
         @media (max-width: 768px) {
             .dropdown-content {
                 left: auto;
@@ -103,6 +103,15 @@
         .info-tarjeta h3 { margin: 0 0 10px; font-size: 1.1em; color: #222; text-transform: uppercase; }
         .info-tarjeta h2 { color: #27ae60; margin: 0; font-size: 1.3em; }
 
+        /* --- ESTILOS DE LA SECCIÓN CONTACTO --- */
+        .contacto-wrapper { display: flex; flex-wrap: wrap; gap: 40px; margin-top: 20px; background: white; padding: 40px; border-radius: 6px; border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .contacto-info { flex: 1; min-width: 280px; }
+        .contacto-info h3 { margin-top: 0; font-size: 1.4em; color: #111; text-transform: uppercase; border-bottom: 3px solid #f39c12; padding-bottom: 8px; display: inline-block; }
+        .contacto-info p { margin: 20px 0; line-height: 1.6; font-size: 1.05em; }
+        .contacto-formulario { flex: 1; min-width: 280px; }
+        .contacto-formulario input, .contacto-formulario textarea { margin-bottom: 15px; padding: 12px; border: 1px solid #ccc; border-radius: 4px; width: 100%; font-family: inherit; font-size: 100%; }
+        .contacto-formulario input:focus, .contacto-formulario textarea:focus { border-color: #f39c12; outline: none; box-shadow: 0 0 4px rgba(243, 156, 18, 0.3); }
+
         /* Modal / Vista de Detalle de Producto */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
         .modal { background: white; width: 90%; max-width: 900px; max-height: 85vh; overflow-y: auto; border-radius: 8px; display: flex; flex-wrap: wrap; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -120,7 +129,7 @@
         .opcion-grupo label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
         .guia-talles { font-size: 0.85em; color: #2980b9; text-decoration: underline; cursor: pointer; display: inline-block; margin-top: 5px; }
 
-        /* --- NUEVOS ESTILOS PARA LOS SELECTORES VISUALES DE TALLES Y COLORES --- */
+        /* --- SELECTORES VISUALES --- */
         .selector-visual { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px; }
         .opcion-talle { border: 2px solid #ccc; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; background: white; user-select: none; }
         .opcion-talle:hover { border-color: #999; }
@@ -157,9 +166,9 @@
                 
                 <!-- BOTONES NAVEGACIÓN -->
                 <li><button onclick="alert('Próximamente: Ropa Personalizada')">ROPA PERSONALIZADA</button></li>
-                <!-- EL BOTÓN CATÁLOGO AHORA ABRE TU PDF DE SUPABASE -->
                 <li><button onclick="window.open('https://ibqypnfabfieikpxczdn.supabase.co/storage/v1/object/public/catalogo/catalogoKaike2026a.pdf', '_blank')">CATÁLOGO</button></li>
-                <li><button onclick="alert('Próximamente: Formulario de Contacto')">CONTACTO</button></li>
+                <!-- NUEVO BOTÓN CON FUNCIÓN -->
+                <li><button onclick="mostrarContacto()">CONTACTO</button></li>
                 
                 <li class="dropdown">
                     <button>CATEGORÍAS ▾</button>
@@ -195,6 +204,28 @@
     <div id="pantalla-catalogo" class="container" style="display: none;">
         <h2 class="titulo-seccion" id="titulo-categoria">Catálogo</h2>
         <div class="catalogo" id="contenedor-productos"></div>
+    </div>
+
+    <!-- NUEVA PANTALLA DE CONTACTO -->
+    <div id="pantalla-contacto" class="container" style="display: none;">
+        <h2 class="titulo-seccion">Contacto</h2>
+        <div class="contacto-wrapper">
+            <div class="contacto-info">
+                <h3>Kaike Pampa</h3>
+                <p><strong>📍 Ubicación:</strong> Gualeguaychú, Entre Ríos, Argentina</p>
+                <p><strong>📱 WhatsApp Comercial:</strong> +54 9 XXX XXX XXXX</p>
+                <p><strong>✉️ Correo Electrónico:</strong> ventas@kaikepampa.com.ar</p>
+                <p><strong>⏰ Horarios:</strong> Lunes a Viernes de 08:00 a 17:00 hs.</p>
+            </div>
+            <div class="contacto-formulario">
+                <form id="formContacto" onsubmit="enviarMensajeContacto(event)">
+                    <input type="text" id="contacto-nombre" placeholder="Tu Nombre / Empresa" required>
+                    <input type="email" id="contacto-email" placeholder="Tu Correo Electrónico" required>
+                    <textarea id="contacto-mensaje" placeholder="Dejanos tu consulta o pedido de presupuesto acá..." style="height: 130px;" required></textarea>
+                    <button type="submit" class="btn-agregar" style="background: #f39c12; margin-top: 5px;">Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <div class="modal-overlay" id="modal-producto">
@@ -242,7 +273,6 @@
         let carrito = [];
         let productoSeleccionado = null;
         
-        // Variables para guardar la selección del cliente antes de añadir al carrito
         let talleElegido = null;
         let colorElegido = null;
 
@@ -260,7 +290,6 @@
             const contenedor = document.getElementById('contenedor-destacados');
             contenedor.innerHTML = '';
             
-            // Eliminamos duplicados de nombre solo para la vista de destacados
             const destacadosUnicos = [];
             const nombresVistos = new Set();
             for (const prod of productos) {
@@ -274,8 +303,10 @@
             renderizarTarjetas(destacadosUnicos, contenedor);
         }
 
+        // SE ACTUALIZARON LAS FUNCIONES PARA OCULTAR CONTACTO CUANDO NAVEGAS
         function filtrar(categoria) {
             document.getElementById('pantalla-inicio').style.display = 'none';
+            document.getElementById('pantalla-contacto').style.display = 'none';
             document.getElementById('pantalla-catalogo').style.display = 'block';
             
             const contenedor = document.getElementById('contenedor-productos');
@@ -288,7 +319,22 @@
 
         function mostrarInicio() {
             document.getElementById('pantalla-catalogo').style.display = 'none';
+            document.getElementById('pantalla-contacto').style.display = 'none';
             document.getElementById('pantalla-inicio').style.display = 'block';
+        }
+
+        // FUNCION PARA MOSTRAR LA PANTALLA DE CONTACTO
+        function mostrarContacto() {
+            document.getElementById('pantalla-inicio').style.display = 'none';
+            document.getElementById('pantalla-catalogo').style.display = 'none';
+            document.getElementById('pantalla-contacto').style.display = 'block';
+        }
+
+        // ACCION DEL FORMULARIO DE CONTACTO
+        function enviarMensajeContacto(event) {
+            event.preventDefault(); // Evita que la página se recargue
+            alert('¡Gracias por comunicarte con Kaike Pampa! Tu consulta fue recibida con éxito. Te responderemos a la brevedad.');
+            document.getElementById('formContacto').reset(); // Limpia los campos
         }
 
         function renderizarTarjetas(productos, contenedor) {
@@ -317,7 +363,6 @@
             const prod = JSON.parse(prodString);
             productoSeleccionado = prod;
             
-            // Reiniciamos las selecciones y ocultamos errores
             talleElegido = null;
             colorElegido = null;
             document.getElementById('error-talle').style.display = 'none';
@@ -331,7 +376,6 @@
             const descripcionEl = document.querySelector('.modal-info .descripcion');
             descripcionEl.innerText = prod.descripcion ? prod.descripcion : 'Sin descripción disponible para este producto.';
             
-            // --- GENERAR BOTONES DE TALLES ---
             const contenedorTalles = document.getElementById('contenedor-modal-talles');
             contenedorTalles.innerHTML = '';
             if (prod.talle) {
@@ -341,7 +385,6 @@
                     btn.className = 'opcion-talle';
                     btn.innerText = talle;
                     btn.onclick = () => {
-                        // Quita la selección a todos y se la da al clickeado
                         document.querySelectorAll('.opcion-talle').forEach(el => el.classList.remove('seleccionado'));
                         btn.classList.add('seleccionado');
                         talleElegido = talle;
@@ -351,10 +394,9 @@
                 });
             } else {
                 contenedorTalles.innerHTML = '<span style="color:#666;">Único</span>';
-                talleElegido = 'Único'; // Si no hay talles en BD, forzamos "Único"
+                talleElegido = 'Único';
             }
 
-            // --- GENERAR BOTONES DE COLORES ---
             const contenedorColores = document.getElementById('contenedor-modal-colores');
             contenedorColores.innerHTML = '';
             if (prod.color) {
@@ -376,11 +418,9 @@
                 colorElegido = 'Estándar';
             }
 
-            // Lógica al apretar "Añadir al pedido"
             document.getElementById('btn-confirmar-agregar').onclick = () => {
                 let valido = true;
                 
-                // Validamos que haya seleccionado algo si hay opciones disponibles
                 if (!talleElegido && prod.talle) {
                     document.getElementById('error-talle').style.display = 'block';
                     valido = false;
@@ -391,7 +431,6 @@
                 }
 
                 if (valido) {
-                    // AHORA PASAMOS LA CATEGORÍA A LA FUNCIÓN DEL CARRITO
                     agregarAlCarrito(prod.nombre, prod.categoria, talleElegido, colorElegido, prod.precio);
                     cerrarModal();
                 }
@@ -405,28 +444,23 @@
             productoSeleccionado = null;
         }
 
-        // FUNCIÓN MODIFICADA PARA RECIBIR LA CATEGORÍA
         function agregarAlCarrito(nombre, categoria, talle, color, precio) {
-            // Si el producto no tiene categoría cargada, mostramos "Sin Categoría"
             const cat = categoria ? categoria : "Sin Categoría";
             carrito.push({ nombre, categoria: cat, talle, color, precio });
             document.getElementById('contador-carrito').innerText = carrito.length;
         }
 
-        // MENSAJE DE WHATSAPP MODIFICADO
         function enviarPedidoPorWhatsApp() {
             if (carrito.length === 0) {
                 alert("Seleccioná al menos un producto para armar el pedido.");
                 return;
             }
             
-            // PONER EL NUMERO DE TELEFONO DE KAIKE PAMPA ACÁ (EJ: 5491123456789)
             const numeroWhatsApp = "549XXXXXXXXXX";
             let textoMensaje = "¡Hola! Quería consultar por el siguiente pedido:%0A%0A";
             let totalPedido = 0;
             
             carrito.forEach(articulo => {
-                // Ahora el texto incluye la categoría entre corchetes
                 textoMensaje += `- ${articulo.nombre} [${articulo.categoria}] (Talle: ${articulo.talle}, Color: ${articulo.color}) - $${articulo.precio}%0A`;
                 totalPedido += parseFloat(articulo.precio);
             });
