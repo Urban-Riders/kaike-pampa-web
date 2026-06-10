@@ -170,10 +170,8 @@
             <ul>
                 <li><button onclick="mostrarInicio()">INICIO</button></li>
                 
-                <!-- BOTONES NAVEGACIÓN -->
                 <li><button onclick="alert('Próximamente: Ropa Personalizada')">ROPA PERSONALIZADA</button></li>
                 <li><button onclick="window.open('https://ibqypnfabfieikpxczdn.supabase.co/storage/v1/object/public/catalogo/catalogoKaike2026a.pdf', '_blank')">CATÁLOGO</button></li>
-                <!-- NUEVO BOTÓN CON FUNCIÓN -->
                 <li><button onclick="mostrarContacto()">CONTACTO</button></li>
                 
                 <li class="dropdown">
@@ -212,7 +210,6 @@
         <div class="catalogo" id="contenedor-productos"></div>
     </div>
 
-    <!-- NUEVA PANTALLA DE CONTACTO -->
     <div id="pantalla-contacto" class="container" style="display: none;">
         <h2 class="titulo-seccion">Contacto</h2>
         <div class="contacto-wrapper">
@@ -224,7 +221,6 @@
                 <p><strong>⏰ Horarios:</strong> Lunes a Viernes de 08:00 a 17:00 hs.</p>
             </div>
             <div class="contacto-formulario">
-                <!-- FORMULARIO CONECTADO A FORMSPREE CON AJAX -->
                 <form id="formContacto">
                     <input type="text" name="Nombre" id="contacto-nombre" placeholder="Tu Nombre / Empresa" required>
                     <input type="email" name="Email" id="contacto-email" placeholder="Tu Correo Electrónico" required>
@@ -232,7 +228,6 @@
                     
                     <button type="submit" id="btn-enviar-contacto" class="btn-agregar" style="background: #f39c12; margin-top: 5px;">Enviar Mensaje</button>
                     
-                    <!-- Mensajes de feedback -->
                     <div id="form-exito" class="mensaje-feedback feedback-exito">¡Gracias! Tu mensaje fue enviado con éxito. Te responderemos a la brevedad.</div>
                     <div id="form-error" class="mensaje-feedback feedback-error">Hubo un problema al enviar el mensaje. Por favor, intentá de nuevo.</div>
                 </form>
@@ -499,16 +494,22 @@
             '#FFFFFF': 'Blanco',
             '#FF0000': 'Rojo',
             '#0000FF': 'Azul',
+            '#000080': 'Azul',       // NUEVO
             '#4169E1': 'Azulino',
-            '#BFA64A': 'Beige',
+            '#BFA64A': 'Beige',      // Original
+            '#BFA65E': 'Beige',      // NUEVO
             '#808080': 'Gris',
-            '#F39C12': 'Naranja'
-            // Agregá más colores que tengas en Supabase acá siguiendo el formato
+            '#F39C12': 'Naranja',
+            '#FFFF00': 'Amarillo'    // NUEVO
         };
 
         function traducirColor(codigoHex) {
+            if (!codigoHex) return "Estándar";
             let codigo = codigoHex.trim().toUpperCase();
-            return diccionarioColores[codigo] || codigoHex; 
+            if (!codigo.startsWith('#')) {
+                codigo = '#' + codigo;
+            }
+            return diccionarioColores[codigo] || codigo; 
         }
 
         function enviarPedidoPorWhatsApp() {
