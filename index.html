@@ -112,6 +112,17 @@
         .contacto-formulario input, .contacto-formulario textarea { margin-bottom: 15px; padding: 12px; border: 1px solid #ccc; border-radius: 4px; width: 100%; font-family: inherit; font-size: 100%; }
         .contacto-formulario input:focus, .contacto-formulario textarea:focus { border-color: #f39c12; outline: none; box-shadow: 0 0 4px rgba(243, 156, 18, 0.3); }
 
+        /* --- ESTILOS DE LA SECCIÓN PERSONALIZADA --- */
+        .personalizada-header { text-align: center; margin-bottom: 40px; }
+        .personalizada-header p { font-size: 1.1em; color: #555; max-width: 800px; margin: 0 auto; line-height: 1.6; }
+        .galeria-personalizada { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .galeria-item { border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .galeria-item img { width: 100%; height: 250px; object-fit: cover; display: block; transition: 0.3s; }
+        .galeria-item img:hover { transform: scale(1.05); }
+        .cta-personalizada { text-align: center; background: #222; color: white; padding: 40px; border-radius: 8px; }
+        .cta-personalizada h3 { color: #f39c12; margin-top: 0; font-size: 1.8em; text-transform: uppercase;}
+        .cta-personalizada p { font-size: 1.1em; margin-bottom: 25px;}
+
         /* Modal / Vista de Detalle de Producto */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
         .modal { background: white; width: 90%; max-width: 900px; max-height: 85vh; overflow-y: auto; border-radius: 8px; display: flex; flex-wrap: wrap; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -176,7 +187,7 @@
             <ul>
                 <li><button onclick="mostrarInicio()">INICIO</button></li>
                 
-                <li><button onclick="alert('Próximamente: Ropa Personalizada')">ROPA PERSONALIZADA</button></li>
+                <li><button onclick="mostrarPersonalizada()">ROPA PERSONALIZADA</button></li>
                 <li><button onclick="window.open('https://ibqypnfabfieikpxczdn.supabase.co/storage/v1/object/public/catalogo/catalogoKaike2026a.pdf', '_blank')">CATÁLOGO</button></li>
                 <li><button onclick="mostrarContacto()">CONTACTO</button></li>
                 
@@ -214,6 +225,32 @@
     <div id="pantalla-catalogo" class="container" style="display: none;">
         <h2 class="titulo-seccion" id="titulo-categoria">Catálogo</h2>
         <div class="catalogo" id="contenedor-productos"></div>
+    </div>
+
+    <div id="pantalla-personalizada" class="container" style="display: none;">
+        <h2 class="titulo-seccion">Ropa Personalizada</h2>
+        
+        <div class="personalizada-header">
+            <p>Destacá la identidad de tu empresa con nuestros servicios de personalización. Realizamos bordados y estampados de alta durabilidad en camisas, chombas, camperas y ropa de trabajo en general. Adaptamos tu logo para que luzca profesional, prolijo y resista el uso diario.</p>
+        </div>
+        
+        <div class="galeria-personalizada">
+            <div class="galeria-item">
+                <img src="https://images.unsplash.com/photo-1584904535311-c3098379469e?q=80&w=600&auto=format&fit=crop" alt="Bordado de uniformes">
+            </div>
+            <div class="galeria-item">
+                <img src="https://images.unsplash.com/photo-1618355280209-4bf9d29c3620?q=80&w=600&auto=format&fit=crop" alt="Estampado de remeras">
+            </div>
+            <div class="galeria-item">
+                <img src="https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=600&auto=format&fit=crop" alt="Ropa de trabajo personalizada">
+            </div>
+        </div>
+
+        <div class="cta-personalizada">
+            <h3>¿Querés un presupuesto a medida?</h3>
+            <p>Escribinos contándonos qué prendas necesitás y pasanos tu logo para que lo coticemos.</p>
+            <button class="btn-agregar" style="width: auto; padding: 15px 40px; background: #f39c12; margin-top: 10px;" onclick="mostrarContacto()">CONTACTANOS ACÁ</button>
+        </div>
     </div>
 
     <div id="pantalla-contacto" class="container" style="display: none;">
@@ -266,7 +303,6 @@
                         <div id="error-color" class="error-seleccion">⚠️ Por favor, seleccioná un color.</div>
                     </div>
                     
-                    <!-- NUEVO SELECTOR DE CANTIDAD -->
                     <div class="opcion-grupo">
                         <label>Cantidad:</label>
                         <div class="selector-cantidad">
@@ -298,7 +334,6 @@
         
         let talleElegido = null;
         let colorElegido = null;
-        // NUEVA VARIABLE PARA CANTIDAD
         let cantidadElegida = 1;
 
         async function cargarProductos() {
@@ -328,9 +363,16 @@
             renderizarTarjetas(destacadosUnicos, contenedor);
         }
 
-        function filtrar(categoria) {
+        // --- SISTEMA DE NAVEGACIÓN ---
+        function ocultarTodasLasPantallas() {
             document.getElementById('pantalla-inicio').style.display = 'none';
+            document.getElementById('pantalla-catalogo').style.display = 'none';
             document.getElementById('pantalla-contacto').style.display = 'none';
+            document.getElementById('pantalla-personalizada').style.display = 'none';
+        }
+
+        function filtrar(categoria) {
+            ocultarTodasLasPantallas();
             document.getElementById('pantalla-catalogo').style.display = 'block';
             
             const contenedor = document.getElementById('contenedor-productos');
@@ -342,15 +384,18 @@
         }
 
         function mostrarInicio() {
-            document.getElementById('pantalla-catalogo').style.display = 'none';
-            document.getElementById('pantalla-contacto').style.display = 'none';
+            ocultarTodasLasPantallas();
             document.getElementById('pantalla-inicio').style.display = 'block';
         }
 
         function mostrarContacto() {
-            document.getElementById('pantalla-inicio').style.display = 'none';
-            document.getElementById('pantalla-catalogo').style.display = 'none';
+            ocultarTodasLasPantallas();
             document.getElementById('pantalla-contacto').style.display = 'block';
+        }
+
+        function mostrarPersonalizada() {
+            ocultarTodasLasPantallas();
+            document.getElementById('pantalla-personalizada').style.display = 'block';
         }
 
         // FUNCION AJAX PARA FORMSPREE
@@ -418,7 +463,6 @@
             
             talleElegido = null;
             colorElegido = null;
-            // REINICIAMOS LA CANTIDAD AL ABRIR UN PRODUCTO NUEVO
             cantidadElegida = 1;
             document.getElementById('input-cantidad-modal').value = 1;
             
@@ -488,7 +532,6 @@
                 }
 
                 if (valido) {
-                    // AHORA PASAMOS LA CANTIDAD A LA FUNCIÓN DEL CARRITO
                     agregarAlCarrito(prod.nombre, prod.categoria, talleElegido, colorElegido, prod.precio, cantidadElegida);
                     cerrarModal();
                 }
@@ -497,10 +540,9 @@
             document.getElementById('modal-producto').style.display = 'flex';
         }
 
-        // FUNCIÓN PARA EL BOTÓN + Y - DEL MODAL
         function modificarCantidad(cambio) {
             let nuevaCantidad = cantidadElegida + cambio;
-            if (nuevaCantidad >= 1) { // Evita que se seleccionen cantidades negativas o cero
+            if (nuevaCantidad >= 1) { 
                 cantidadElegida = nuevaCantidad;
                 document.getElementById('input-cantidad-modal').value = cantidadElegida;
             }
@@ -511,10 +553,8 @@
             productoSeleccionado = null;
         }
 
-        // FUNCIÓN ACTUALIZADA PARA RECIBIR LA CANTIDAD
         function agregarAlCarrito(nombre, categoria, talle, color, precio, cantidad) {
             const cat = categoria ? categoria : "Sin Categoría";
-            // Guardamos la cantidad en el objeto del carrito
             carrito.push({ nombre, categoria: cat, talle, color, precio, cantidad });
             document.getElementById('contador-carrito').innerText = carrito.length;
         }
@@ -544,7 +584,6 @@
             return diccionarioColores[codigo] || codigo; 
         }
 
-        // --- FUNCIÓN DE WHATSAPP ACTUALIZADA CON CANTIDADES ---
         function enviarPedidoPorWhatsApp() {
             if (carrito.length === 0) {
                 alert("Seleccioná al menos un producto para armar el pedido.");
@@ -558,10 +597,8 @@
             
             carrito.forEach(articulo => {
                 let nombreColor = traducirColor(articulo.color);
-                // Multiplicamos el precio por la cantidad para el subtotal del ítem
                 let subtotalArticulo = parseFloat(articulo.precio) * articulo.cantidad;
                 
-                // Formateamos el texto: "2x Producto [Categoría] (Talle: L, Color: Azul) - $Subtotal"
                 textoMensaje += `- ${articulo.cantidad}x ${articulo.nombre} [${articulo.categoria}] (Talle: ${articulo.talle}, Color: ${nombreColor}) - $${subtotalArticulo}\n`;
                 
                 totalPedido += subtotalArticulo;
