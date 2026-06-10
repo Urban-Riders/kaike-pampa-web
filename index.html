@@ -154,7 +154,6 @@
         <nav>
             <ul>
                 <li><button onclick="mostrarInicio()">INICIO</button></li>
-                <li><button onclick="filtrar('Todas')">TODOS LOS PRODUCTOS</button></li>
                 
                 <li class="dropdown">
                     <button>CATEGORÍAS ▾</button>
@@ -188,7 +187,7 @@
     </div>
 
     <div id="pantalla-catalogo" class="container" style="display: none;">
-        <h2 class="titulo-seccion" id="titulo-categoria">Todos los Productos</h2>
+        <h2 class="titulo-seccion" id="titulo-categoria">Catálogo</h2>
         <div class="catalogo" id="contenedor-productos"></div>
     </div>
 
@@ -254,8 +253,19 @@
         function mostrarDestacados(productos) {
             const contenedor = document.getElementById('contenedor-destacados');
             contenedor.innerHTML = '';
-            const destacados = productos.slice(0, 8);
-            renderizarTarjetas(destacados, contenedor);
+            
+            // Eliminamos duplicados de nombre solo para la vista de destacados
+            const destacadosUnicos = [];
+            const nombresVistos = new Set();
+            for (const prod of productos) {
+                if (!nombresVistos.has(prod.nombre)) {
+                    destacadosUnicos.push(prod);
+                    nombresVistos.add(prod.nombre);
+                }
+                if (destacadosUnicos.length >= 8) break;
+            }
+            
+            renderizarTarjetas(destacadosUnicos, contenedor);
         }
 
         function filtrar(categoria) {
@@ -264,14 +274,10 @@
             
             const contenedor = document.getElementById('contenedor-productos');
             const titulo = document.getElementById('titulo-categoria');
-            if (categoria === 'Todas') {
-                titulo.innerText = 'Todos los Productos';
-                renderizarTarjetas(productosGlobales, contenedor);
-            } else {
-                titulo.innerText = categoria.toUpperCase();
-                const filtrados = productosGlobales.filter(p => p.categoria && p.categoria.toLowerCase() === categoria.toLowerCase());
-                renderizarTarjetas(filtrados, contenedor);
-            }
+            
+            titulo.innerText = categoria.toUpperCase();
+            const filtrados = productosGlobales.filter(p => p.categoria && p.categoria.toLowerCase() === categoria.toLowerCase());
+            renderizarTarjetas(filtrados, contenedor);
         }
 
         function mostrarInicio() {
