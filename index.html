@@ -499,17 +499,24 @@
             }
             
             const numeroWhatsApp = "5493446645264";
-            let textoMensaje = "¡Hola! Quería consultar por el siguiente pedido:%0A%0A";
+            
+            // Armamos el texto usando saltos de línea normales (\n)
+            let textoMensaje = "¡Hola! Quería consultar por el siguiente pedido:\n\n";
             let totalPedido = 0;
             
             carrito.forEach(articulo => {
-                textoMensaje += `- ${articulo.nombre} [${articulo.categoria}] (Talle: ${articulo.talle}, Color: ${articulo.color}) - $${articulo.precio}%0A`;
+                textoMensaje += `- ${articulo.nombre} [${articulo.categoria}] (Talle: ${articulo.talle}, Color: ${articulo.color}) - $${articulo.precio}\n`;
                 totalPedido += parseFloat(articulo.precio);
             });
             
-            textoMensaje += `%0A*Total aproximado: $${totalPedido}*%0A%0AAguardo confirmación de stock.`;
+            textoMensaje += `\n*Total aproximado: $${totalPedido}*\n\nAguardo confirmación de stock.`;
             
-            const url = `https://wa.me/${numeroWhatsApp}?text=${textoMensaje}`;
+            // CODIFICACIÓN SEGURA: Esto traduce los espacios y símbolos para que no se rompa el link
+            const textoCodificado = encodeURIComponent(textoMensaje);
+            
+            // Usamos la API oficial que es más robusta para WhatsApp Business
+            const url = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${textoCodificado}`;
+            
             window.open(url, '_blank');
         }
 
