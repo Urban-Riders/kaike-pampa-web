@@ -139,6 +139,12 @@
         .opcion-color:hover { transform: scale(1.1); }
         .opcion-color.seleccionado { border-color: #27ae60; transform: scale(1.1); box-shadow: 0 0 0 2px white, 0 0 0 4px #27ae60; }
         
+        /* --- SELECTOR DE CANTIDAD --- */
+        .selector-cantidad { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
+        .btn-cantidad { background: #f1f1f1; border: 1px solid #ccc; width: 35px; height: 35px; border-radius: 4px; font-size: 1.2em; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .btn-cantidad:hover { background: #ddd; }
+        .input-cantidad { width: 50px; height: 35px; text-align: center; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; font-weight: bold; }
+        
         .error-seleccion { color: red; font-size: 0.85em; display: none; margin-top: 5px; font-weight: bold; }
 
         .btn-agregar { background: #111; color: white; border: none; padding: 15px; width: 100%; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 1.1em; text-transform: uppercase; transition: 0.3s; margin-top: 10px; }
@@ -259,6 +265,16 @@
                         <div id="contenedor-modal-colores" class="selector-visual"></div>
                         <div id="error-color" class="error-seleccion">⚠️ Por favor, seleccioná un color.</div>
                     </div>
+                    
+                    <!-- NUEVO SELECTOR DE CANTIDAD -->
+                    <div class="opcion-grupo">
+                        <label>Cantidad:</label>
+                        <div class="selector-cantidad">
+                            <button class="btn-cantidad" onclick="modificarCantidad(-1)">-</button>
+                            <input type="number" id="input-cantidad-modal" class="input-cantidad" value="1" min="1" readonly>
+                            <button class="btn-cantidad" onclick="modificarCantidad(1)">+</button>
+                        </div>
+                    </div>
                 </div>
 
                 <button class="btn-agregar" id="btn-confirmar-agregar">Añadir al Pedido</button>
@@ -282,6 +298,8 @@
         
         let talleElegido = null;
         let colorElegido = null;
+        // NUEVA VARIABLE PARA CANTIDAD
+        let cantidadElegida = 1;
 
         async function cargarProductos() {
             const { data, error } = await cliente.from('productos').select('*');
@@ -335,16 +353,15 @@
             document.getElementById('pantalla-contacto').style.display = 'block';
         }
 
-        // NUEVA FUNCIÓN AJAX PARA FORMSPREE
+        // FUNCION AJAX PARA FORMSPREE
         const formContacto = document.getElementById('formContacto');
         formContacto.addEventListener('submit', async function(event) {
-            event.preventDefault(); // Evita que la página salte a Formspree
+            event.preventDefault(); 
             
             const btn = document.getElementById('btn-enviar-contacto');
             const mensajeExito = document.getElementById('form-exito');
             const mensajeError = document.getElementById('form-error');
             
-            // Cambiamos el estado del botón a "Enviando..."
             btn.innerText = 'Enviando...';
             btn.disabled = true;
             mensajeExito.style.display = 'none';
@@ -361,7 +378,7 @@
                 
                 if (response.ok) {
                     mensajeExito.style.display = 'block';
-                    formContacto.reset(); // Limpiamos los campos
+                    formContacto.reset(); 
                 } else {
                     mensajeError.style.display = 'block';
                 }
@@ -369,7 +386,6 @@
                 mensajeError.style.display = 'block';
             }
             
-            // Restauramos el botón
             btn.innerText = 'Enviar Mensaje';
             btn.disabled = false;
         });
@@ -402,6 +418,10 @@
             
             talleElegido = null;
             colorElegido = null;
+            // REINICIAMOS LA CANTIDAD AL ABRIR UN PRODUCTO NUEVO
+            cantidadElegida = 1;
+            document.getElementById('input-cantidad-modal').value = 1;
+            
             document.getElementById('error-talle').style.display = 'none';
             document.getElementById('error-color').style.display = 'none';
             
@@ -468,7 +488,8 @@
                 }
 
                 if (valido) {
-                    agregarAlCarrito(prod.nombre, prod.categoria, talleElegido, colorElegido, prod.precio);
+                    // AHORA PASAMOS LA CANTIDAD A LA FUNCIÓN DEL CARRITO
+                    agregarAlCarrito(prod.nombre, prod.categoria, talleElegido, colorElegido, prod.precio, cantidadElegida);
                     cerrarModal();
                 }
             };
@@ -476,14 +497,25 @@
             document.getElementById('modal-producto').style.display = 'flex';
         }
 
+        // FUNCIÓN PARA EL BOTÓN + Y - DEL MODAL
+        function modificarCantidad(cambio) {
+            let nuevaCantidad = cantidadElegida + cambio;
+            if (nuevaCantidad >= 1) { // Evita que se seleccionen cantidades negativas o cero
+                cantidadElegida = nuevaCantidad;
+                document.getElementById('input-cantidad-modal').value = cantidadElegida;
+            }
+        }
+
         function cerrarModal() {
             document.getElementById('modal-producto').style.display = 'none';
             productoSeleccionado = null;
         }
 
-        function agregarAlCarrito(nombre, categoria, talle, color, precio) {
+        // FUNCIÓN ACTUALIZADA PARA RECIBIR LA CANTIDAD
+        function agregarAlCarrito(nombre, categoria, talle, color, precio, cantidad) {
             const cat = categoria ? categoria : "Sin Categoría";
-            carrito.push({ nombre, categoria: cat, talle, color, precio });
+            // Guardamos la cantidad en el objeto del carrito
+            carrito.push({ nombre, categoria: cat, talle, color, precio, cantidad });
             document.getElementById('contador-carrito').innerText = carrito.length;
         }
 
@@ -494,13 +526,13 @@
             '#FFFFFF': 'Blanco',
             '#FF0000': 'Rojo',
             '#0000FF': 'Azul',
-            '#000080': 'Azul',       // NUEVO
+            '#000080': 'Azul',       
             '#4169E1': 'Azulino',
-            '#BFA64A': 'Beige',      // Original
-            '#BFA65E': 'Beige',      // NUEVO
+            '#BFA64A': 'Beige',      
+            '#BFA65E': 'Beige',      
             '#808080': 'Gris',
             '#F39C12': 'Naranja',
-            '#FFFF00': 'Amarillo'    // NUEVO
+            '#FFFF00': 'Amarillo'    
         };
 
         function traducirColor(codigoHex) {
@@ -512,6 +544,7 @@
             return diccionarioColores[codigo] || codigo; 
         }
 
+        // --- FUNCIÓN DE WHATSAPP ACTUALIZADA CON CANTIDADES ---
         function enviarPedidoPorWhatsApp() {
             if (carrito.length === 0) {
                 alert("Seleccioná al menos un producto para armar el pedido.");
@@ -520,22 +553,23 @@
             
             const numeroWhatsApp = "5493446645264";
             
-            // Armamos el texto usando saltos de línea normales (\n)
             let textoMensaje = "¡Hola! Quería consultar por el siguiente pedido:\n\n";
             let totalPedido = 0;
             
             carrito.forEach(articulo => {
                 let nombreColor = traducirColor(articulo.color);
-                textoMensaje += `- ${articulo.nombre} [${articulo.categoria}] (Talle: ${articulo.talle}, Color: ${nombreColor}) - $${articulo.precio}\n`;
-                totalPedido += parseFloat(articulo.precio);
+                // Multiplicamos el precio por la cantidad para el subtotal del ítem
+                let subtotalArticulo = parseFloat(articulo.precio) * articulo.cantidad;
+                
+                // Formateamos el texto: "2x Producto [Categoría] (Talle: L, Color: Azul) - $Subtotal"
+                textoMensaje += `- ${articulo.cantidad}x ${articulo.nombre} [${articulo.categoria}] (Talle: ${articulo.talle}, Color: ${nombreColor}) - $${subtotalArticulo}\n`;
+                
+                totalPedido += subtotalArticulo;
             });
             
             textoMensaje += `\n*Total aproximado: $${totalPedido}*\n\nAguardo confirmación de stock.`;
             
-            // CODIFICACIÓN SEGURA: Esto traduce los espacios y símbolos para que no se rompa el link
             const textoCodificado = encodeURIComponent(textoMensaje);
-            
-            // Usamos la API oficial que es más robusta para WhatsApp Business
             const url = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${textoCodificado}`;
             
             window.open(url, '_blank');
