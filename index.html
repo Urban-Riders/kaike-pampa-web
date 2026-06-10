@@ -492,6 +492,25 @@
             document.getElementById('contador-carrito').innerText = carrito.length;
         }
 
+        // --- DICCIONARIO TRADUCTOR DE COLORES ---
+        const diccionarioColores = {
+            '#7C982F': 'Verde',
+            '#000000': 'Negro',
+            '#FFFFFF': 'Blanco',
+            '#FF0000': 'Rojo',
+            '#0000FF': 'Azul',
+            '#4169E1': 'Azulino',
+            '#BFA64A': 'Beige',
+            '#808080': 'Gris',
+            '#F39C12': 'Naranja'
+            // Agregá más colores que tengas en Supabase acá siguiendo el formato
+        };
+
+        function traducirColor(codigoHex) {
+            let codigo = codigoHex.trim().toUpperCase();
+            return diccionarioColores[codigo] || codigoHex; 
+        }
+
         function enviarPedidoPorWhatsApp() {
             if (carrito.length === 0) {
                 alert("Seleccioná al menos un producto para armar el pedido.");
@@ -505,7 +524,8 @@
             let totalPedido = 0;
             
             carrito.forEach(articulo => {
-                textoMensaje += `- ${articulo.nombre} [${articulo.categoria}] (Talle: ${articulo.talle}, Color: ${articulo.color}) - $${articulo.precio}\n`;
+                let nombreColor = traducirColor(articulo.color);
+                textoMensaje += `- ${articulo.nombre} [${articulo.categoria}] (Talle: ${articulo.talle}, Color: ${nombreColor}) - $${articulo.precio}\n`;
                 totalPedido += parseFloat(articulo.precio);
             });
             
