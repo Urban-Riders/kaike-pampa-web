@@ -218,10 +218,11 @@
                 <p><strong>⏰ Horarios:</strong> Lunes a Viernes de 08:00 a 17:00 hs.</p>
             </div>
             <div class="contacto-formulario">
-                <form id="formContacto" onsubmit="enviarMensajeContacto(event)">
-                    <input type="text" id="contacto-nombre" placeholder="Tu Nombre / Empresa" required>
-                    <input type="email" id="contacto-email" placeholder="Tu Correo Electrónico" required>
-                    <textarea id="contacto-mensaje" placeholder="Dejanos tu consulta o pedido de presupuesto acá..." style="height: 130px;" required></textarea>
+                <!-- FORMULARIO CONECTADO A FORMSPREE -->
+                <form action="https://formspree.io/f/xrevazvj" method="POST">
+                    <input type="text" name="Nombre" id="contacto-nombre" placeholder="Tu Nombre / Empresa" required>
+                    <input type="email" name="Email" id="contacto-email" placeholder="Tu Correo Electrónico" required>
+                    <textarea name="Mensaje" id="contacto-mensaje" placeholder="Dejanos tu consulta o pedido de presupuesto acá..." style="height: 130px;" required></textarea>
                     <button type="submit" class="btn-agregar" style="background: #f39c12; margin-top: 5px;">Enviar Mensaje</button>
                 </form>
             </div>
@@ -328,13 +329,6 @@
             document.getElementById('pantalla-inicio').style.display = 'none';
             document.getElementById('pantalla-catalogo').style.display = 'none';
             document.getElementById('pantalla-contacto').style.display = 'block';
-        }
-
-        // ACCION DEL FORMULARIO DE CONTACTO
-        function enviarMensajeContacto(event) {
-            event.preventDefault(); // Evita que la página se recargue
-            alert('¡Gracias por comunicarte con Kaike Pampa! Tu consulta fue recibida con éxito. Te responderemos a la brevedad.');
-            document.getElementById('formContacto').reset(); // Limpia los campos
         }
 
         function renderizarTarjetas(productos, contenedor) {
