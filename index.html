@@ -68,19 +68,19 @@
         @media (max-width: 768px) {
             .dropdown-content {
                 left: auto;
-                right: 0; /* Ancla el menú a la derecha para que se despliegue hacia la izquierda */
-                transform: none; /* Quitamos el centrado forzado */
-                width: 250px; /* Ancho cómodo y estético para el celular */
-                max-width: 95vw; /* Límite de seguridad para pantallas muy chicas */
+                right: 0; 
+                transform: none; 
+                width: 250px; 
+                max-width: 95vw; 
                 min-width: unset;
             }
             .dropdown-content button {
-                white-space: normal; /* Permite que el texto baje a dos renglones si es largo */
+                white-space: normal; 
                 line-height: 1.4;
-                text-align: left; /* Lo regresamos a la izquierda para mantener la prolijidad */
+                text-align: left; 
                 padding: 12px 20px;
             }
-            .dropdown-content button:hover { padding-left: 20px; } /* Desactiva el desplazamiento a la derecha en móviles */
+            .dropdown-content button:hover { padding-left: 20px; } 
         }
         
         /* Banner de Inicio */
@@ -379,7 +379,8 @@
                 }
 
                 if (valido) {
-                    agregarAlCarrito(prod.nombre, talleElegido, colorElegido, prod.precio);
+                    // AHORA PASAMOS LA CATEGORÍA A LA FUNCIÓN DEL CARRITO
+                    agregarAlCarrito(prod.nombre, prod.categoria, talleElegido, colorElegido, prod.precio);
                     cerrarModal();
                 }
             };
@@ -392,11 +393,15 @@
             productoSeleccionado = null;
         }
 
-        function agregarAlCarrito(nombre, talle, color, precio) {
-            carrito.push({ nombre, talle, color, precio });
+        // FUNCIÓN MODIFICADA PARA RECIBIR LA CATEGORÍA
+        function agregarAlCarrito(nombre, categoria, talle, color, precio) {
+            // Si el producto no tiene categoría cargada, mostramos "Sin Categoría"
+            const cat = categoria ? categoria : "Sin Categoría";
+            carrito.push({ nombre, categoria: cat, talle, color, precio });
             document.getElementById('contador-carrito').innerText = carrito.length;
         }
 
+        // MENSAJE DE WHATSAPP MODIFICADO
         function enviarPedidoPorWhatsApp() {
             if (carrito.length === 0) {
                 alert("Seleccioná al menos un producto para armar el pedido.");
@@ -409,7 +414,8 @@
             let totalPedido = 0;
             
             carrito.forEach(articulo => {
-                textoMensaje += `- ${articulo.nombre} (Talle: ${articulo.talle}, Color: ${articulo.color}) - $${articulo.precio}%0A`;
+                // Ahora el texto incluye la categoría entre corchetes
+                textoMensaje += `- ${articulo.nombre} [${articulo.categoria}] (Talle: ${articulo.talle}, Color: ${articulo.color}) - $${articulo.precio}%0A`;
                 totalPedido += parseFloat(articulo.precio);
             });
             
