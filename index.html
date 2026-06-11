@@ -83,12 +83,14 @@
             .dropdown-content button:hover { padding-left: 20px; } 
         }
         
-        /* Banner de Inicio */
-        .hero { background: url('img/Cortando_tela.png') center/cover; height: 350px; display: flex; align-items: center; justify-content: center; text-align: center; color: white; position: relative; }
-        .hero::before { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); }
-        .hero-content { position: relative; z-index: 1; }
-        .hero h2 { font-size: 2.5em; margin: 0 0 10px; text-transform: uppercase; }
-        .hero p { font-size: 1.2em; margin: 0; }
+       /* --- ESTILOS DEL CARRUSEL HERO --- */
+        .hero-carrusel { position: relative; height: 350px; overflow: hidden; background-color: #111; }
+        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-position: center; background-size: cover; opacity: 0; transition: opacity 1.5s ease-in-out; display: flex; align-items: center; justify-content: center; text-align: center; color: white; }
+        .slide.activo { opacity: 1; z-index: 1; }
+        .capa-oscura { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 0; }
+        .hero-content { position: relative; z-index: 2; padding: 0 20px; }
+        .hero-content h2 { font-size: 2.5em; margin: 0 0 10px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .hero-content p { font-size: 1.2em; margin: 0; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
 
         /* Contenedor Principal */
         .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
@@ -213,8 +215,31 @@
     </header>
 
     <div id="pantalla-inicio">
-        <div class="hero">
-            <div class="hero-content"></div>
+        <div class="hero-carrusel">
+            <!-- Slide 1: Taller -->
+            <div class="slide activo" style="background-image: url('img/Cortando_tela.png');">
+                <div class="capa-oscura"></div>
+                <div class="hero-content">
+                    <h2>FABRICACIÓN PROPIA</h2>
+                    <p>Calidad artesanal en cada prenda desde el primer corte.</p>
+                </div>
+            </div>
+            <!-- Slide 2: Costuras -->
+            <div class="slide" style="background-image: url('img/mameluco.png');">
+                <div class="capa-oscura"></div>
+                <div class="hero-content">
+                    <h2>RESISTENCIA EXTREMA</h2>
+                    <p>Costuras reforzadas y materiales pensados para el trabajo duro.</p>
+                </div>
+            </div>
+            <!-- Slide 3: Calzado -->
+            <div class="slide" style="background-image: url('img/botaseguridad.png');">
+                <div class="capa-oscura"></div>
+                <div class="hero-content">
+                    <h2>PROTECCIÓN INTEGRAL</h2>
+                    <p>Calzado de seguridad diseñado para brindarte máxima confianza.</p>
+                </div>
+            </div>
         </div>
         <div class="container">
             <h2 class="titulo-seccion">Productos Destacados</h2>
@@ -612,6 +637,29 @@
         }
 
         cargarProductos();
+// --- MOTOR DEL CARRUSEL HERO ---
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function mostrarSlides() {
+            if (slides.length === 0) return; // Por si no estamos en la pantalla de inicio
+            
+            // Oculta todos los slides
+            slides.forEach(slide => slide.classList.remove('activo'));
+            
+            // Avanza al siguiente
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1 }
+            
+            // Muestra el slide actual
+            slides[slideIndex - 1].classList.add('activo');
+            
+            // Cambia de imagen cada 4 segundos (4000 milisegundos)
+            setTimeout(mostrarSlides, 4000); 
+        }
+
+        // Iniciar el carrusel
+        mostrarSlides();
     </script>
 </body>
 </html>
