@@ -132,6 +132,13 @@
         .cerrar-modal:hover { background: #ff4757; color: white; }
         .modal-img { flex: 1; min-width: 300px; max-height: 500px; }
         .modal-img img { width: 100%; height: 100%; object-fit: cover; }
+/* --- ESTILOS DE LA GALERIA DE MINIATURAS --- */
+        .galeria-miniaturas { display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; padding-bottom: 5px; }
+        .galeria-miniaturas::-webkit-scrollbar { height: 6px; }
+        .galeria-miniaturas::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+        .miniatura { width: 60px; height: 60px; object-fit: cover; border: 2px solid transparent; cursor: pointer; border-radius: 4px; transition: 0.2s; opacity: 0.6; }
+        .miniatura:hover { opacity: 1; }
+        .miniatura.activa { border-color: #f39c12; opacity: 1; }
         .modal-info { flex: 1; padding: 40px 30px; min-width: 300px; display: flex; flex-direction: column; justify-content: center; }
         .modal-info h2 { margin: 0 0 10px; font-size: 2em; color: #111; text-transform: uppercase; }
         .modal-info .precio { font-size: 1.8em; color: #27ae60; font-weight: bold; margin-bottom: 15px; }
@@ -316,6 +323,7 @@
             <button class="cerrar-modal" onclick="cerrarModal()">×</button>
             <div class="modal-img">
                 <img id="modal-foto" src="" alt="Producto">
+            <div id="modal-miniaturas" class="galeria-miniaturas"></div>
             </div>
             <div class="modal-info">
                 <h2 id="modal-nombre">Nombre del Producto</h2>
@@ -533,6 +541,38 @@
             const foto = prod.foto_url ? prod.foto_url : 'https://via.placeholder.com/400x400?text=Sin+Imagen';
             document.getElementById('modal-foto').src = foto;
             document.getElementById('modal-nombre').innerText = prod.nombre;
+// --- LÓGICA DE GALERÍA DE MINIATURAS ---
+            const contenedorMiniaturas = document.getElementById('modal-miniaturas');
+            contenedorMiniaturas.innerHTML = ''; // Limpiar miniaturas
+            
+            const agregarMiniatura = (url, esPrincipal) => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.className = 'miniatura';
+                if (esPrincipal) img.classList.add('activa');
+                
+                img.onclick = () => {
+                    document.getElementById('modal-foto').src = url;
+                    document.querySelectorAll('.miniatura').forEach(m => m.classList.remove('activa'));
+                    img.classList.add('activa');
+                };
+                contenedorMiniaturas.appendChild(img);
+            };
+
+            // 1. Agregamos la foto principal
+            if (prod.foto_url) {
+                agregarMiniatura(prod.foto_url, true);
+            }
+
+            // 2. Agregamos las fotos extras (galeria_fotos)
+            if (prod.galeria_fotos) {
+                const fotosArray = prod.galeria_fotos.split(',').map(f => f.trim());
+                fotosArray.forEach(fotoExtra => {
+                    if (fotoExtra && fotoExtra !== prod.foto_url) {
+                        agregarMiniatura(fotoExtra, false);
+                    }
+                });
+            }
             document.getElementById('modal-precio').innerText = `$${prod.precio}`;
             
             const descripcionEl = document.querySelector('.modal-info .descripcion');
