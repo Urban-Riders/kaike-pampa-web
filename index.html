@@ -172,6 +172,15 @@
         .mensaje-feedback { display: none; padding: 15px; border-radius: 4px; margin-top: 15px; font-weight: bold; text-align: center; }
         .feedback-exito { background-color: #e8f8f5; color: #27ae60; border: 1px solid #27ae60; }
         .feedback-error { background-color: #fdedec; color: #c0392b; border: 1px solid #c0392b; }
+/* --- MODAL GUÍA DE TALLES --- */
+.modal-talles-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1001; justify-content: center; align-items: center; }
+.modal-talles { background: white; width: 90%; max-width: 550px; padding: 30px; border-radius: 8px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: left; animation: fadeIn 0.3s ease-in-out; }
+.modal-talles h2 { margin: 0 0 10px; color: #111; text-transform: uppercase; font-size: 1.5em; border-bottom: 2px solid #f39c12; padding-bottom: 10px; }
+.tabla-talles { width: 100%; border-collapse: collapse; margin-top: 15px; }
+.tabla-talles th, .tabla-talles td { padding: 12px; border-bottom: 1px solid #ddd; text-align: center; }
+.tabla-talles th { background-color: #f8f9fa; font-weight: bold; }
+.tabla-talles tr:hover { background-color: #f1f1f1; }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -318,7 +327,7 @@
                         <label>Talle:</label>
                         <div id="contenedor-modal-talles" class="selector-visual"></div>
                         <div id="error-talle" class="error-seleccion">⚠️ Por favor, seleccioná un talle.</div>
-                        <span class="guia-talles" onclick="alert('Guía de talles:\nS: Pecho 90cm\nM: Pecho 100cm\nL: Pecho 110cm\nXL: Pecho 120cm\nPantalones: Medir contorno de cintura.')">Ver guía de talles</span>
+                        <span class="guia-talles" onclick="abrirModalGuiaTalles()">Ver guía de talles</span>
                     </div>
 
                     <div class="opcion-grupo">
@@ -341,7 +350,35 @@
             </div>
         </div>
     </div>
-
+<!-- Modal Guía de Talles -->
+<div class="modal-talles-overlay" id="modal-guia-talles">
+    <div class="modal-talles">
+        <button class="cerrar-modal" onclick="cerrarModalGuiaTalles()">×</button>
+        <h2>Guía de Talles Estándar</h2>
+        <p style="color: #666; margin-bottom: 20px;">Medidas expresadas en centímetros (cm) sobre el cuerpo.</p>
+        
+        <div style="overflow-x: auto;">
+            <table class="tabla-talles">
+                <thead>
+                    <tr>
+                        <th>Talle</th>
+                        <th>Pecho</th>
+                        <th>Cintura</th>
+                        <th>Cadera</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>S</strong></td><td>88 - 93</td><td>76 - 81</td><td>92 - 97</td></tr>
+                    <tr><td><strong>M</strong></td><td>94 - 99</td><td>82 - 87</td><td>98 - 103</td></tr>
+                    <tr><td><strong>L</strong></td><td>100 - 105</td><td>88 - 93</td><td>104 - 109</td></tr>
+                    <tr><td><strong>XL</strong></td><td>106 - 111</td><td>94 - 99</td><td>110 - 115</td></tr>
+                    <tr><td><strong>XXL</strong></td><td>112 - 117</td><td>100 - 105</td><td>116 - 121</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="font-size: 0.85em; color: #666; margin-top: 15px;">💡 <em>Si tus medidas están entre dos talles, te sugerimos elegir el más grande. Para pantalones, priorizar la medida de la cintura.</em></p>
+    </div>
+</div>
     <div class="carrito-flotante" onclick="enviarPedidoPorWhatsApp()">
         🛒 Pedido: <span id="contador-carrito">0</span>
     </div>
@@ -637,6 +674,22 @@
         }
 
         cargarProductos();
+// --- FUNCIONES GUÍA DE TALLES ---
+function abrirModalGuiaTalles() {
+    document.getElementById('modal-guia-talles').style.display = 'flex';
+}
+
+function cerrarModalGuiaTalles() {
+    document.getElementById('modal-guia-talles').style.display = 'none';
+}
+
+// Cerrar el modal si se hace clic fuera de la caja blanca
+window.addEventListener('click', function(event) {
+    const modalTalles = document.getElementById('modal-guia-talles');
+    if (event.target === modalTalles) {
+        cerrarModalGuiaTalles();
+    }
+});
 // --- MOTOR DEL CARRUSEL HERO ---
         let slideIndex = 0;
         const slides = document.querySelectorAll('.slide');
