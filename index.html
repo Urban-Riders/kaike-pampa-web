@@ -130,8 +130,9 @@
         .modal { background: white; width: 90%; max-width: 900px; max-height: 85vh; overflow-y: auto; border-radius: 8px; display: flex; flex-wrap: wrap; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .cerrar-modal { position: absolute; top: 10px; right: 10px; background: #f1f1f1; border: none; font-size: 24px; cursor: pointer; color: #333; transition: 0.2s; z-index: 10; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .cerrar-modal:hover { background: #ff4757; color: white; }
-        .modal-img { flex: 1; min-width: 300px; max-height: 500px; }
-        .modal-img img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-img { flex: 1; min-width: 300px; display: flex; flex-direction: column; }
+        #modal-foto { width: 100%; height: 350px; object-fit: cover; border-radius: 8px 0 0 0; }
+        @media (max-width: 768px) { #modal-foto { height: 280px; border-radius: 8px 8px 0 0; } }
 /* --- ESTILOS DE LA GALERIA DE MINIATURAS --- */
         .galeria-miniaturas { display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; padding-bottom: 5px; }
         .galeria-miniaturas::-webkit-scrollbar { height: 6px; }
@@ -139,7 +140,8 @@
         .modal-img .miniatura { width: 60px; height: 60px; object-fit: cover; border: 2px solid transparent; cursor: pointer; border-radius: 4px; transition: 0.2s; opacity: 0.6; }
         .modal-img .miniatura:hover { opacity: 1; }
         .modal-img .miniatura.activa { border-color: #f39c12; opacity: 1; }
-        .modal-info { flex: 1; padding: 40px 30px; min-width: 300px; display: flex; flex-direction: column; justify-content: center; }
+        .modal-info { flex: 1; padding: 20px 25px; min-width: 300px; display: flex;
+        flex-direction: column; justify-content: center; }
         .modal-info h2 { margin: 0 0 10px; font-size: 2em; color: #111; text-transform: uppercase; }
         .modal-info .precio { font-size: 1.8em; color: #27ae60; font-weight: bold; margin-bottom: 15px; }
         .modal-info .descripcion { color: #666; line-height: 1.5; margin-bottom: 25px; font-size: 0.95em; }
