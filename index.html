@@ -189,7 +189,22 @@
 .tabla-talles th, .tabla-talles td { padding: 12px; border-bottom: 1px solid #ddd; text-align: center; }
 .tabla-talles th { background-color: #f8f9fa; font-weight: bold; }
 .tabla-talles tr:hover { background-color: #f1f1f1; }
-@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1);
+} }
+
+/* NUEVO CÓDIGO */
+.alerta-minimo {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 15px 0;
+    border: 1px solid #ffeeba;
+    text-align: center;
+}
+
     </style>
 </head>
 <body>
@@ -331,8 +346,10 @@
                 <h2 id="modal-nombre">Nombre del Producto</h2>
                 <div class="precio" id="modal-precio">$0</div>
                 <div class="descripcion">Indumentaria de alta resistencia diseñada para el trabajo exigente. Confección reforzada que garantiza durabilidad y confort durante toda la jornada.</div>
-                
-                <div class="opciones-contenedor">
+            
+            <p class="alerta-minimo">⚠️ Atención: El pedido mínimo es de 10 unidades (de una misma prenda o surtidas).</p>
+            
+            <div class="opciones-contenedor">
                     <div class="opcion-grupo">
                         <label>Talle:</label>
                         <div id="contenedor-modal-talles" class="selector-visual"></div>
